@@ -11,15 +11,14 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import { Text } from 'react-native';
 
 import { RootTabParamList, TasksStackParamList } from '@/types';
-
-// TODO: Replace these placeholder imports with your real screen components
+import { useTaskContext } from '@/state';
 import TaskListScreen from '@/screens/TaskListScreen';
 import TaskDetailScreen from '@/screens/TaskDetailScreen';
 import EditTaskScreen from '@/screens/EditTaskScreen';
@@ -33,7 +32,7 @@ const Stack = createNativeStackNavigator<TasksStackParamList>();
 // Test with: npx uri-scheme open "taskmanager://task/task-001" --ios
 const prefix = Linking.createURL('/');
 
-const linkingConfig = {
+const linkingConfig: LinkingOptions<RootTabParamList> = {
   prefixes: [prefix, 'taskmanager://'],
   config: {
     screens: {
@@ -42,6 +41,7 @@ const linkingConfig = {
           TaskDetail: 'task/:taskId',
         },
       },
+      Profile: 'profile',
     },
   },
 };
@@ -64,9 +64,17 @@ function TasksStack() {
 }
 
 // ─── Root tab navigator ───────────────────────────────────────────────────────
+
+const TasksTabIcon = ({ color }: { color: string }) => (
+  <Text style={{ fontSize: 20, color }}>📋</Text>
+);
+
+const ProfileTabIcon = ({ color }: { color: string }) => (
+  <Text style={{ fontSize: 20, color }}>👤</Text>
+);
+
 export default function RootNavigator() {
-  // TODO: Wire up the badge count to your incomplete task count from state
-  const incompleteBadgeCount = 0;
+  const { incompleteCount } = useTaskContext();
 
   return (
     <NavigationContainer linking={linkingConfig}>
@@ -82,16 +90,15 @@ export default function RootNavigator() {
           name="Tasks"
           component={TasksStack}
           options={{
-            tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📋</Text>,
-            // TODO: Replace the hardcoded 0 with your real incomplete task count
-            tabBarBadge: incompleteBadgeCount > 0 ? incompleteBadgeCount : undefined,
+            tabBarIcon: TasksTabIcon,
+            tabBarBadge: incompleteCount > 0 ? incompleteCount : undefined,
           }}
         />
         <Tab.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
-            tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>👤</Text>,
+            tabBarIcon: ProfileTabIcon,
           }}
         />
       </Tab.Navigator>
