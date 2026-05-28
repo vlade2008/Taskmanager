@@ -90,13 +90,13 @@ When complete, please:
 ### Please add to this README before submitting:
 
 **State management choice:**
-> _Which library/approach did you use, and why? What would make you switch?_
+> I used React Context + `useState` in a small, focused task provider. This keeps the implementation lightweight, easy to reason about, and avoids adding a new dependency for an assessment-sized app. I would switch to Zustand or Redux if the app grew more complex, needed offline persistence, or required more composable asynchronous state logic.
 
 **Assumptions made:**
-> _Anything that was ambiguous in the brief and how you resolved it_
+> I treated the mock data as the single source of truth stored in memory, without a backend or persistent storage. Navigation is based on the provided deep link structure, and task updates are applied immediately in UI state for optimistic feedback.
 
 **If I had more time:**
-> _What would you do differently or add?_
+> I would add unit/integration tests for task completion and editing flows, persist tasks locally with `expo-secure-store` or SQLite, improve accessibility and theming (dark mode), and polish the UI with better animations and error handling.
 
 ---
 
