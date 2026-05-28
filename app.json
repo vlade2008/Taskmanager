@@ -19,6 +19,10 @@
       },
       "package": "com.assessment.taskmanager"
     },
-    "scheme": "taskmanager"
+    "scheme": "taskmanager",
+    "plugins": [
+      "expo-router",
+      "expo-asset"
+    ]
   }
 }
